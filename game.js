@@ -31,6 +31,24 @@ for(var c=0; c<brickColumnCount; c++) {
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
+window.addEventListener("resize", setDimensions)
+// //touch events
+// canvas.addEventListener('touchcancel', touchCancel);
+// canvas.addEventListener('touchend', touchEnd);
+// canvas.addEventListener('touchMove', touchMove);
+// canvas.addEventListener('touchStart', touchStart);
+
+// function touchCancel() {
+
+// }
+
+// function touchEnd() {
+
+// }
+
+// function touchMove() {
+  
+// }
 
 function keyDownHandler(e) {
     if(e.key == "Right" || e.key == "ArrowRight") {
@@ -75,9 +93,6 @@ function collisionDetection() {
   }
 }
 
-
-
-
 function drawBall() {
   ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, Math.PI*2);
@@ -87,7 +102,7 @@ function drawBall() {
 }
 function drawPaddle() {
   ctx.beginPath();
-  ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
+  ctx.rect(paddleX, canvas.height-paddleHeight*3, paddleWidth, paddleHeight);
   ctx.fillStyle = "#0095DD";
   ctx.fill();
   ctx.closePath();
@@ -100,20 +115,15 @@ function drawBricks() {
         var brickY = (c*(brickHeight+brickPadding))+brickOffsetTop;
         bricks[c][r].x = brickX;
         bricks[c][r].y = brickY;
-      // var image = new Image(100,100);
-      var image  = document.getElementById("html5");
-      ctx.drawImage(image, brickX, brickY,brickWidth,brickHeight);
-
-      // image.src = "D:/BreakBuilder-test/Tiles/Breakout Tile Set Free/PNG/11-Breakout-Tiles.png";
-  }
-        // ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        // ctx.fillStyle = "#0095DD";
-        // ctx.fill();
-        // ctx.closePath();
+        ctx.beginPath();
+        ctx.rect(brickX, brickY, brickWidth, brickHeight);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
       }
     }
   }
-
+}
 function drawScore() {
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD";
@@ -125,8 +135,20 @@ function drawLives() {
   ctx.fillText("Lives: "+lives, canvas.width-65, 20);
 }
 
+function setDimensions() {
+
+  // setting up canvas
+  // TODO: change the speed of the ball wrt to height of the canvas
+  // TODO: change the size of the paddle according to screen size
+  // 
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+
+}
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  setDimensions();
   drawBricks();
   drawBall();
   drawPaddle();
@@ -171,6 +193,5 @@ function draw() {
   y += dy;
   requestAnimationFrame(draw);
 }
-
 
 draw();
